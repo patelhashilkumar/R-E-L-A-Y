@@ -50,6 +50,11 @@ kbd { font: 11px var(--font); border: 1px solid var(--line); border-radius: 5px;
 /* Audiowide ships a single weight; synthetic bold smears it. */
 @layer app-base { h1, h2, h3 { font-family: var(--display); font-weight: 400; letter-spacing: -.01em; } }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+}
 
 .welcome { height: 100%; display: grid; place-items: center; background: var(--side-bg); padding: 16px; }
 .welcome-card { width: min(400px, 100%); display: grid; justify-items: start; gap: 14px; text-align: left; background: var(--panel); border-radius: 14px; padding: 32px 28px; box-shadow: 0 24px 60px rgba(0,0,0,.35); }
@@ -173,13 +178,68 @@ kbd { font: 11px var(--font); border: 1px solid var(--line); border-radius: 5px;
 .typing { height: 20px; padding: 0 22px; font-size: 12px; color: var(--muted); }
 
 .composer { padding: 0 20px 16px; position: relative; }
-.composer-box { position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 6px 10px 8px; }
-.composer-box:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
-.composer-box textarea { border: 0; background: transparent; box-shadow: none !important; resize: none; padding: 6px 2px; max-height: 200px; field-sizing: content; min-height: 38px; }
-.format-bar { display: flex; gap: 2px; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
-.format-bar button { width: 28px; height: 26px; border-radius: 6px; color: var(--muted); font-size: 13px; }
-.format-bar button:hover { background: var(--hover); color: var(--text); }
-.composer-actions { display: flex; align-items: center; gap: 4px; }
+.composer-box {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 12px;
+  transition: border-color .18s ease, box-shadow .22s ease;
+}
+.composer-box:focus-within {
+  border-color: color-mix(in srgb, var(--accent) 75%, var(--line));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 24%, transparent), 0 4px 16px -2px rgba(0, 0, 0, 0.18);
+}
+.composer-box textarea,
+.composer-box textarea:focus,
+.composer-box textarea:focus-visible {
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  resize: none;
+  padding: 6px 2px;
+  max-height: 200px;
+  field-sizing: content;
+  min-height: 38px;
+  font-family: inherit;
+  font-size: var(--font-size);
+  color: var(--text);
+  line-height: 1.45;
+}
+.composer-box textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.65;
+}
+.format-bar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  padding-bottom: 5px;
+  margin-bottom: 4px;
+}
+.format-bar button {
+  width: 28px;
+  height: 26px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .15s, color .15s;
+}
+.format-bar button:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+.composer-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
 .popover { position: absolute; bottom: 100%; left: 0; margin-bottom: 8px; background: var(--raised); border: 1px solid var(--line); border-radius: 12px; padding: 6px; display: flex; flex-wrap: wrap; gap: 2px; box-shadow: 0 12px 30px rgba(0,0,0,.35); z-index: 20; }
 .actions .popover { right: 0; left: auto; width: 220px; top: 100%; bottom: auto; margin: 6px 0 0; }
 .emoji-pop { width: 220px; }
@@ -846,8 +906,6 @@ input[type='checkbox'].fit { width: auto; }
 .typing-dots b:nth-child(3) { animation-delay: .3s; }
 @keyframes blink { 0%, 80%, 100% { opacity: .25; transform: none; } 40% { opacity: 1; transform: translateY(-3px); } }
 
-.composer-box { transition: box-shadow .35s var(--spring), border-color .2s, transform .35s var(--spring); }
-.composer-box:focus-within { transform: translateY(-2px); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent), 0 14px 34px rgba(10,25,50,.12); }
 .send-btn { transition: transform .3s var(--spring-pop), filter .15s; }
 .send-btn:active:not(:disabled) { transform: scale(.94); }
 .ghost-btn:active { transform: scale(.96); }
